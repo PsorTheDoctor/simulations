@@ -11,13 +11,6 @@ p.setGravity(0, 0, -9.81)
 
 width = 128
 height = 128
-fov = 60
-aspect = width / height
-near = 0.02
-far = 1
-
-viewMatrix = p.computeViewMatrix([0, 0, 0], [0, 0, 0], [1, 0, 0])
-projectionMatrix = p.computeProjectionMatrixFOV(fov, aspect, near, far)
 
 viewMat = [
     0.642787516117096, -0.4393851161003113, 0.6275069713592529, 0.0, 0.766044557094574,
@@ -34,8 +27,8 @@ images = p.getCameraImage(width,
                           projectionMatrix=projMat,
                           renderer=p.ER_BULLET_HARDWARE_OPENGL)
 
-proj_opengl = np.reshape(images[2], (height, width, 4)) * 1. / 255.
-time.sleep(1)
+np.reshape(images[2], (height, width, 4)) * 1. / 255.
+# time.sleep(1)
 
 images = p.getCameraImage(width,
                           height,
@@ -43,7 +36,7 @@ images = p.getCameraImage(width,
                           projectionMatrix=projMat,
                           renderer=p.ER_TINY_RENDERER)
 
-proj_tiny = np.reshape(images[2], (height, width, 4)) * 1. / 255.
+np.reshape(images[2], (height, width, 4)) * 1. / 255.
 
 for i in range(10000):
     p.stepSimulation()

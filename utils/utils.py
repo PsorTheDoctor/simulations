@@ -1,5 +1,15 @@
 import pybullet as p
+import numpy as np
 import random
+
+def getCameraView(viewMat, projMat):
+
+    width = 128
+    height = 128
+    images = p.getCameraImage(width, height, viewMatrix=viewMat,
+                              projectionMatrix=projMat)
+    np.reshape(images[2], (height, width, 4)) * 1. / 255.
+
 
 def createTerrain():
 

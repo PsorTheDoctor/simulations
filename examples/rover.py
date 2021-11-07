@@ -1,6 +1,5 @@
 import pybullet as p
 import pybullet_data
-import numpy as np
 import math
 import time
 from utils import utils
@@ -40,26 +39,16 @@ armEndEffectorId = 6  # because it has 7 axes
 cid = p.createConstraint(husky, -1, armId, -1, p.JOINT_FIXED,
                          [0, 0, 0], [0, 0, 0], [0., 0., -.5], [0, 0, 0, 1])
 
-### GET CAMERA VIEW
-width = 128
-height = 128
-fov = 60
-aspect = width / height
-near = 0.02
-far = 1
-
-viewMatrix = p.computeViewMatrix([0, 0, 0], [0, 0, 0], [1, 0, 0])
-projectionMatrix = p.computeProjectionMatrixFOV(fov, aspect, near, far)
-
-images = p.getCameraImage(width, height, viewMatrix, projectionMatrix, shadow=True,
-                          renderer=p.ER_BULLET_HARDWARE_OPENGL)
-rgb_opengl = np.reshape(images[2], (height, width, 4)) * 1. / 255.
-depth_buffer_opengl = np.reshape(images[3], [width, height])
-depth_opengl = far * near / (far - (far - near)) * depth_buffer_opengl
-seg_opengl = np.reshape(images[4], [width, height]) * 1. / 255.
-time.sleep(1)
-
 ### DEFINE CONSTANTS
+viewMat = [
+    0.642787516117096, -0.4393851161003113, 0.6275069713592529, 0.0, 0.766044557094574,
+    0.36868777871131897, -0.5265407562255859, 0.0, -0.0, 0.8191521167755127, 0.5735764503479004,
+    0.0, 2.384185791015625e-07, 2.384185791015625e-07, -5.000000476837158, 1.0
+]
+projMat = [
+    0.7499999403953552, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0000200271606445, -1.0,
+    0.0, 0.0, -0.02000020071864128, 0.0
+]
 baseOrn = [0, 0, 0, 1]
 
 # lower limits for null space
@@ -98,6 +87,8 @@ wheelDeltasFwd = [1, 1, 1, 1]
 
 ### SIMULATION LOOP
 while True:
+    utils.getCameraView(viewMat, projMat)
+
     keys = p.getKeyboardEvents()
     shift = 0.001
     speed = 0.1
