@@ -2,34 +2,44 @@ import pybullet as p
 import pybullet_data
 import math
 import time
+from utils import utils
 
+### SETUP
 client = p.connect(p.SHARED_MEMORY)
 if client < 0:
     p.connect(p.GUI)
-
-p.setPhysicsEngineParameter(enableConeFriction=False)
+# Get models
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
 
-p.loadURDF('plane.urdf', [0, 0, -0.3])
+p.setPhysicsEngineParameter(enableConeFriction=False)
+# Disable rendering during creation
+p.configureDebugVisualizer(p.COV_ENABLE_RENDERING, False)
+
+### LOAD MODELS
+utils.createTerrain()
+
+# Load mobile platform
 husky = p.loadURDF('husky/husky.urdf', [0.290388, 0.329902, -0.310270],
                    [0.002328, -0.000984, 0.996491, 0.083659])
 for i in range(p.getNumJoints(husky)):
     print(p.getJointInfo(husky, i))
 
+# Load manipulator
 armId = p.loadURDF('kuka_iiwa/model_free_base.urdf', 0.193749, 0.345564, 0.120208, 0.002327,
                    -0.000988, 0.996491, 0.083659)
 jointPositions = [3.559609, 0.411182, 0.862129, 1.744441, 0.077299, -1.129685, 0.006001]
-for jointId in range(p.getNumJoints(armId)):
+
+numJoints = p.getNumJoints(armId)
+for jointId in range(numJoints):
     p.resetJointState(armId, jointId, jointPositions[jointId])
 
 # Put arm on a top of husky
 cid = p.createConstraint(husky, -1, armId, -1, p.JOINT_FIXED,
                          [0, 0, 0], [0, 0, 0], [0., 0., -.5], [0, 0, 0, 1])
-# baseOrn = p.getQuaternionFromEuler([3.1415, 0, 0.3])
-baseOrn = [0, 0, 0, 1]
 
-numJoints = p.getNumJoints(armId)
-armEndEffectorId = 6
+### DEFINE CONSTANTS
+baseOrn = [0, 0, 0, 1]
+armEndEffectorId = 6  # because it has 7 axes
 
 # lower limits for null space
 ll = [-.967, -2, -2.96, 0.19, -2.96, -2.09, -3.05]
@@ -45,6 +55,7 @@ jd = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
 for i in range(numJoints):
     p.resetJointState(armId, i, rp[i])
 
+p.configureDebugVisualizer(p.COV_ENABLE_RENDERING, True)
 p.setGravity(0, 0, -9.81)
 t = 0.
 prevPose = [0, 0, 0]
@@ -59,33 +70,16 @@ trailDuration = 15
 basePos = [0, 0, 0]
 ang = 0
 
-
-def calculateInverseKinematics(armId, endEffectorId, targetPos, threshold, maxIter):
-    closeEnough = False
-    iter = 0
-    jointPoses = None
-    while not closeEnough and iter < maxIter:
-        jointPoses = p.calculateInverseKinematics(armId, endEffectorId, targetPos)
-        for i in range(numJoints):
-            p.resetJointState(armId, i, jointPoses[i])
-        ls = p.getLinkState(armId, endEffectorId)
-        newPos = ls[4]
-        diff = [targetPos[0] - newPos[0], targetPos[1] - newPos[1], targetPos[2] - newPos[2]]
-        dist2 = (diff[0] * diff[0] + diff[1] * diff[1] + diff[2] * diff[2])
-        closeEnough = dist2 < threshold
-        iter += 1
-    return jointPoses
-
-
 wheels = [2, 3, 4, 5]
 wheelVelocities = [0, 0, 0, 0]
 wheelDeltasTurn = [1, -1, 1, -1]
 wheelDeltasFwd = [1, 1, 1, 1]
 
+### SIMULATION LOOP
 while True:
     keys = p.getKeyboardEvents()
-    shift = 0.01
-    speed = 1.0
+    shift = 0.001
+    speed = 0.1
     for k in keys:
         if ord('a') in keys:
             basePos = [basePos[0], basePos[1] - shift, basePos[2]]
@@ -104,6 +98,10 @@ while True:
         if p.B3G_DOWN_ARROW in keys:
             for i in range(len(wheels)):
                 wheelVelocities[i] = wheelVelocities[i] - speed * wheelDeltasFwd[i]
+        # Brake
+        if p.B3G_SPACE in keys:
+            for i in range(len(wheels)):
+                wheelVelocities[i] = 0
 
     baseOrn = p.getQuaternionFromEuler([0, 0, ang])
     for i in range(len(wheels)):
@@ -111,7 +109,7 @@ while True:
                                 wheels[i],
                                 p.VELOCITY_CONTROL,
                                 targetVelocity=wheelVelocities[i],
-                                force=1000)
+                                force=100)
     if useRealTimeSimulation:
         t = time.time()
     else:
@@ -147,8 +145,8 @@ while True:
         else:
             threshold = 0.001
             maxIter = 100
-            jointPoses = calculateInverseKinematics(armId, armEndEffectorId, pos,
-                                                    threshold, maxIter)
+            jointPoses = utils.calculateInverseKinematics(armId, armEndEffectorId, pos,
+                                                          threshold, maxIter)
     if useSimulation:
         for i in range(numJoints):
             p.setJointMotorControl2(bodyIndex=armId,
@@ -156,11 +154,11 @@ while True:
                                     controlMode=p.POSITION_CONTROL,
                                     targetPosition=jointPoses[i],
                                     targetVelocity=0,
-                                    force=500,
+                                    force=50,
                                     positionGain=1,
                                     velocityGain=0.1)
     else:
-         # Reset the joint state
+        # Reset the joint state
         for i in range(numJoints):
             p.resetJointState(armId, i, jointPoses[i])
 
