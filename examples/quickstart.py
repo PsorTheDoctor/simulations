@@ -2,7 +2,7 @@ import pybullet as p
 from time import sleep
 import pybullet_data
 
-client = p.connect(p.GUI)
+p.connect(p.GUI)
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
 p.setGravity(0, 0, -9.81)
 planeId = p.loadURDF('plane.urdf')

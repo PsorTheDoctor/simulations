@@ -58,7 +58,7 @@ while True:
         p.stepSimulation()
 
     # Drawing a circle
-    pos = [-0.4, 0.2 * math.cos(t), 0. + 0.2 * math.sin(t)]
+    pos = [-0.4, 0.2 * math.cos(t), 0.2 * math.sin(t)]
     # End effector points down
     orn = p.getQuaternionFromEuler([0, -math.pi, 0])
 

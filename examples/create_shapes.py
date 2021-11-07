@@ -13,10 +13,10 @@ logId = p.startStateLogging(p.STATE_LOGGING_PROFILE_TIMINGS, 'visualShapeBench.j
 # useMaximalCoordinates is much faster than default
 p.loadURDF('plane100.urdf', useMaximalCoordinates=True)
 # Disable rendering during creation
-p.configureDebugVisualizer(p.COV_ENABLE_RENDERING, 0)
-p.configureDebugVisualizer(p.COV_ENABLE_GUI, 0)
+p.configureDebugVisualizer(p.COV_ENABLE_RENDERING, False)
+p.configureDebugVisualizer(p.COV_ENABLE_GUI, False)
 # Disable tinyrenderer, software (CPU) renderer
-p.configureDebugVisualizer(p.COV_ENABLE_TINY_RENDERER, 0)
+p.configureDebugVisualizer(p.COV_ENABLE_TINY_RENDERER, False)
 
 shift = [0, -0.02, 0]
 meshScale = [0.1, 0.1, 0.1]
@@ -42,10 +42,10 @@ for i in range(rangeX):
                                         (-rangeY / 2 + j) * meshScale[1] * 2, 1],
                           useMaximalCoordinates=True)
 
-p.configureDebugVisualizer(p.COV_ENABLE_RENDERING, 1)
+p.configureDebugVisualizer(p.COV_ENABLE_RENDERING, True)
 p.stopStateLogging(logId)
 p.setGravity(0, 0, -10)
-p.setRealTimeSimulation(1)
+p.setRealTimeSimulation(True)
 
 while True:
     sleep(1./240.)
