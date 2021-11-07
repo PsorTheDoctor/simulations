@@ -1,5 +1,6 @@
 import pybullet as p
 import pybullet_data
+import numpy as np
 import math
 import time
 from utils import utils
@@ -33,13 +34,33 @@ numJoints = p.getNumJoints(armId)
 for jointId in range(numJoints):
     p.resetJointState(armId, jointId, jointPositions[jointId])
 
+armEndEffectorId = 6  # because it has 7 axes
+
 # Put arm on a top of husky
 cid = p.createConstraint(husky, -1, armId, -1, p.JOINT_FIXED,
                          [0, 0, 0], [0, 0, 0], [0., 0., -.5], [0, 0, 0, 1])
 
+### GET CAMERA VIEW
+width = 128
+height = 128
+fov = 60
+aspect = width / height
+near = 0.02
+far = 1
+
+viewMatrix = p.computeViewMatrix([0, 0, 0], [0, 0, 0], [1, 0, 0])
+projectionMatrix = p.computeProjectionMatrixFOV(fov, aspect, near, far)
+
+images = p.getCameraImage(width, height, viewMatrix, projectionMatrix, shadow=True,
+                          renderer=p.ER_BULLET_HARDWARE_OPENGL)
+rgb_opengl = np.reshape(images[2], (height, width, 4)) * 1. / 255.
+depth_buffer_opengl = np.reshape(images[3], [width, height])
+depth_opengl = far * near / (far - (far - near)) * depth_buffer_opengl
+seg_opengl = np.reshape(images[4], [width, height]) * 1. / 255.
+time.sleep(1)
+
 ### DEFINE CONSTANTS
 baseOrn = [0, 0, 0, 1]
-armEndEffectorId = 6  # because it has 7 axes
 
 # lower limits for null space
 ll = [-.967, -2, -2.96, 0.19, -2.96, -2.09, -3.05]
