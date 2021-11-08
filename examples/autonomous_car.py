@@ -102,6 +102,7 @@ lastLidarTime = time()
 frame = 0
 while True:
     nowTime = time()
+    # Render camera at 10 Hz
     if nowTime - lastTime > .1:
         ls = p.getLinkState(car, zed_camera_joint, computeForwardKinematics=True)
         camPos = ls[0]
@@ -165,7 +166,7 @@ while True:
         # diffYaw = (carYaw - yaw) * 0.03
         maxForce = p.readUserDebugParameter(maxForceSlider)
         targetVelocity = p.readUserDebugParameter(targetVelocitySlider)
-        steeringAngle =p.readUserDebugParameter(steeringSlider)
+        steeringAngle = p.readUserDebugParameter(steeringSlider)
 
         for wheel in wheels:
             p.setJointMotorControl2(car, wheel, p.VELOCITY_CONTROL,

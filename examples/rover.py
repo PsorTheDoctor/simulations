@@ -33,22 +33,12 @@ numJoints = p.getNumJoints(armId)
 for jointId in range(numJoints):
     p.resetJointState(armId, jointId, jointPositions[jointId])
 
-armEndEffectorId = 6  # because it has 7 axes
-
 # Put arm on a top of husky
 cid = p.createConstraint(husky, -1, armId, -1, p.JOINT_FIXED,
                          [0, 0, 0], [0, 0, 0], [0., 0., -.5], [0, 0, 0, 1])
 
 ### DEFINE CONSTANTS
-viewMat = [
-    0.642787516117096, -0.4393851161003113, 0.6275069713592529, 0.0, 0.766044557094574,
-    0.36868777871131897, -0.5265407562255859, 0.0, -0.0, 0.8191521167755127, 0.5735764503479004,
-    0.0, 2.384185791015625e-07, 2.384185791015625e-07, -5.000000476837158, 1.0
-]
-projMat = [
-    0.7499999403953552, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, -1.0000200271606445, -1.0,
-    0.0, 0.0, -0.02000020071864128, 0.0
-]
+armEndEffectorId = 6  # because it has 7 axes
 baseOrn = [0, 0, 0, 1]
 
 # lower limits for null space
@@ -84,37 +74,46 @@ wheels = [2, 3, 4, 5]
 wheelVelocities = [0, 0, 0, 0]
 wheelDeltasTurn = [1, -1, 1, -1]
 wheelDeltasFwd = [1, 1, 1, 1]
+shift = 0.001
+speed = 0.1
+
+camJoint = 7
+camInfo = p.getDebugVisualizerCamera()
+lastCamTime = time.time()
+
+useLidar = True
+lidarJoint = 7
+numRays = 100
+rayFrom, rayTo = utils.calculateRays(numRays)
+rayIds = utils.initLidar(husky, lidarJoint, numRays, rayFrom, rayTo)
+lastLidarTime = time.time()
+
+### CONFIG GUI
+# camBtn = p.addUserDebugParameter('Camera', 1, 0, startValue=0)
+# lidarBtn = p.addUserDebugParameter('Lidar', 1, 0, startValue=0)
 
 ### SIMULATION LOOP
 while True:
-    utils.getCameraView(viewMat, projMat)
+    nowCamTime = time.time()
+    # Render camera at 10 Hz
+    if nowCamTime - lastCamTime > .1:
+        utils.getCameraView(husky, camJoint, camInfo)
+        lastCamTime = nowCamTime
 
-    keys = p.getKeyboardEvents()
-    shift = 0.001
-    speed = 0.1
-    for k in keys:
-        if ord('a') in keys:
-            basePos = [basePos[0], basePos[1] - shift, basePos[2]]
-        if ord('d') in keys:
-            basePos = [basePos[0], basePos[1] + shift, basePos[2]]
+    # if useLidar:
+    #     if p.readUserDebugParameter(lidarBtn) % 2 == 0:
+    #         nowLidarTime = time.time()
+    #         # Lidar at 10 Hz
+    #         if nowLidarTime - lastLidarTime > .5:
+    #             utils.updateLidar(husky, lidarJoint, numRays, rayFrom, rayTo, rayIds)
+    #             lastLidarTime = nowLidarTime
+    #     else:
+    #         utils.removeLidar(rayIds)
 
-        if p.B3G_LEFT_ARROW in keys:
-            for i in range(len(wheels)):
-                wheelVelocities[i] = wheelVelocities[i] - speed * wheelDeltasTurn[i]
-        if p.B3G_RIGHT_ARROW in keys:
-            for i in range(len(wheels)):
-                wheelVelocities[i] = wheelVelocities[i] + speed * wheelDeltasTurn[i]
-        if p.B3G_UP_ARROW in keys:
-            for i in range(len(wheels)):
-                wheelVelocities[i] = wheelVelocities[i] + speed * wheelDeltasFwd[i]
-        if p.B3G_DOWN_ARROW in keys:
-            for i in range(len(wheels)):
-                wheelVelocities[i] = wheelVelocities[i] - speed * wheelDeltasFwd[i]
-        # Brake
-        if p.B3G_SPACE in keys:
-            for i in range(len(wheels)):
-                wheelVelocities[i] = 0
-
+    # Control panel
+    basePos, wheelVelocities = utils.configControl(basePos, wheels, wheelVelocities,
+                                                   wheelDeltasTurn, wheelDeltasFwd,
+                                                   shift, speed)
     baseOrn = p.getQuaternionFromEuler([0, 0, ang])
     for i in range(len(wheels)):
         p.setJointMotorControl2(husky,
