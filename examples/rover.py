@@ -77,6 +77,7 @@ wheelDeltasFwd = [1, 1, 1, 1]
 shift = 0.001
 speed = 0.1
 
+useCamera = True
 camJoint = 7
 camInfo = p.getDebugVisualizerCamera()
 lastCamTime = time.time()
@@ -89,16 +90,21 @@ rayIds = utils.initLidar(husky, lidarJoint, numRays, rayFrom, rayTo)
 lastLidarTime = time.time()
 
 ### CONFIG GUI
-# camBtn = p.addUserDebugParameter('Camera', 1, 0, startValue=0)
+camBtn = p.addUserDebugParameter('Toggle camera', 1, 0, startValue=0)
 # lidarBtn = p.addUserDebugParameter('Lidar', 1, 0, startValue=0)
 
 ### SIMULATION LOOP
 while True:
-    nowCamTime = time.time()
-    # Render camera at 10 Hz
-    if nowCamTime - lastCamTime > .1:
-        utils.getCameraView(husky, camJoint, camInfo)
-        lastCamTime = nowCamTime
+
+    if useCamera:
+        nowCamTime = time.time()
+        # Render camera at 10 Hz
+        if nowCamTime - lastCamTime > .1:
+            if p.readUserDebugParameter(camBtn) % 2 == 0:
+                utils.getOnboardCamera(husky, camJoint, camInfo)
+                lastCamTime = nowCamTime
+            else:
+                utils.getDefautCamera()
 
     # if useLidar:
     #     if p.readUserDebugParameter(lidarBtn) % 2 == 0:

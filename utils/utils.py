@@ -29,7 +29,7 @@ def createTerrain():
     p.changeVisualShape(terrain, -1, rgbaColor=[0.5, 1, 0.5, 1])
 
 
-def getCameraView(objId, camJoint, camInfo):
+def getOnboardCamera(objId, camJoint, camInfo):
 
     ls = p.getLinkState(objId, camJoint, computeForwardKinematics=True)
     camPos = ls[0]
@@ -44,6 +44,10 @@ def getCameraView(objId, camJoint, camInfo):
     projMat = camInfo[3]
     p.getCameraImage(320, 200, viewMatrix=viewMat, projectionMatrix=projMat,
                      renderer=p.ER_BULLET_HARDWARE_OPENGL)
+
+
+def getDefautCamera():
+    p.getCameraImage(320, 200)
 
 
 def calculateRays(numRays):
