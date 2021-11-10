@@ -18,7 +18,7 @@ def createTerrain():
             heightfieldData[2 * i + (2 * j + 1) * numRows] = height
             heightfieldData[2 * i + 1 + (2 * j + 1) * numRows] = height
 
-    terrainShape = p.createCollisionShape(shapeType = p.GEOM_HEIGHTFIELD,
+    terrainShape = p.createCollisionShape(shapeType=p.GEOM_HEIGHTFIELD,
                                           meshScale=[.05, .05, 1],
                                           heightfieldTextureScaling=(numRows-1)/2,
                                           heightfieldData=heightfieldData,
@@ -42,12 +42,12 @@ def getOnboardCamera(objId, camJoint, camInfo):
                  camPos[2] + forwardVec[2] * 10]
     viewMat = p.computeViewMatrix(camPos, camTarget, camUpVec)
     projMat = camInfo[3]
-    p.getCameraImage(320, 200, viewMatrix=viewMat, projectionMatrix=projMat,
+    p.getCameraImage(160, 100, viewMatrix=viewMat, projectionMatrix=projMat,
                      renderer=p.ER_BULLET_HARDWARE_OPENGL)
 
 
 def getDefautCamera():
-    p.getCameraImage(320, 200)
+    p.getCameraImage(160, 100)
 
 
 def calculateRays(numRays):
