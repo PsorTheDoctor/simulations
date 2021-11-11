@@ -40,6 +40,9 @@ np.reshape(images[2], (height, width, 4)) * 1. / 255.
 
 for i in range(10000):
     p.stepSimulation()
+    camInfo = p.getDebugVisualizerCamera()
+    print("View mat:", np.round(camInfo[2], 2))
+    print("Proj mat:", np.round(camInfo[3], 2))
     time.sleep(1./240.)
 
 p.disconnect()
