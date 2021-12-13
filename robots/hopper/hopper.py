@@ -48,8 +48,9 @@ def transform_H_to_B(vec):
     return BH_matrix * vec
 
 
-k_flight = 1200  # leg spring constant during flight phase
-k_stance = 2700  # leg spring constant during stance phase
+# k_flight = 1200  # leg spring constant during flight phase
+# k_stance = 2700  # leg spring constant during stance phase
+k = 1000
 state = 0
 legForce = 0
 tipLink = 6
@@ -66,6 +67,7 @@ p.setAdditionalSearchPath(pybullet_data.getDataPath())
 
 targetVelocityX = p.addUserDebugParameter('Target velocity X', -0.3, 0.3, 0)
 targetVelocityY = p.addUserDebugParameter('Target velocity Y', -0.3, 0.3, 0)
+springHardness = p.addUserDebugParameter('Spring hardness', 0, 2000, 1000)
 
 planeId = p.loadURDF('plane.urdf')
 p.changeDynamics(planeId, -1, lateralFriction=60)
@@ -111,11 +113,11 @@ while True:
                                 targetVelocity=inner_hip_joint_target_vel)
 
         prev_orientation = base_orientation_euler
-        legForce = -k_stance * position - 20
+        legForce = -k * position - 20
 
     else:  # flight phase
         stance_made = False
-        legForce = -k_flight * position
+        legForce = -k * position
         targetLegDisplacement_H = getTargetLegDisplacement()
         targetLegDisplacement_H = np.append(targetLegDisplacement_H, 1)
         targetLegDisplacement_H = np.matrix(targetLegDisplacement_H)
@@ -139,6 +141,7 @@ while True:
 
     targetVelocity[0] = p.readUserDebugParameter(targetVelocityX)
     targetVelocity[1] = p.readUserDebugParameter(targetVelocityY)
+    k = p.readUserDebugParameter(springHardness)
 
     p.stepSimulation()
     time.sleep(dt)
