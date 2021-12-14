@@ -14,10 +14,14 @@ class Robot:
         p.setGravity(0, 0, -9.81)
 
         self.planeId = p.loadURDF(planePath)
+        p.changeDynamics(self.planeId, -1, lateralFriction=60)
+
         self.robotId = p.loadURDF(robotPath, startPos, p.getQuaternionFromEuler(startOrn))
         self.controlMode = controlMode
         self.numJoint = p.getNumJoints(self.robotId)
         self.jointIdList = list(range(self.numJoint))
+        for elem in range(-1, self.numJoint):
+            p.changeVisualShape(self.robotId, elem, rgbaColor=[0.8, 0.8, 0, 1])
 
         self.maxForce = maxForce
         self.maxForceList = [maxForce] * 12

@@ -15,10 +15,14 @@ class Robot:
         p.setGravity(0, 0, -9.81)
 
         self.planeId = p.loadURDF(planePath)
+        p.changeDynamics(self.planeId, -1, lateralFriction=60)
+
         self.robotId = p.loadURDF(robotPath, startPos, p.getQuaternionFromEuler(startOrn))
         self.controlMode = controlMode
         self.numJoint = p.getNumJoints(self.robotId)
         self.jointIdList = list(range(self.numJoint))
+        for elem in range(-1, self.numJoint):
+            p.changeVisualShape(self.robotId, elem, rgbaColor=[0.8, 0.8, 0, 1])
 
         self.maxForce = maxForce
         self.maxForceList = [maxForce] * 12
@@ -136,8 +140,8 @@ class Quadruped(Robot):
                                                      np.hstack((self.legLH.firstJointOrigin[0:2], -initialCoM_height)),
                                                      np.hstack((self.legRF.firstJointOrigin[0:2], -initialCoM_height)),
                                                      np.hstack((self.legRH.firstJointOrigin[0:2], -initialCoM_height))]),
-                         initialPosition=startPos,
-                         initialOrientation=p.getQuaternionFromEuler(startOrn))
+                         initialPos=startPos,
+                         initialOrn=p.getQuaternionFromEuler(startOrn))
 
         self.inertiaTensor = np.matrix(np.zeros((3, 3)))
         self.inertiaTensor[0, 0] = 0.017409405067
@@ -149,22 +153,22 @@ class Quadruped(Robot):
         hipJoint = jointPositions[1]
         kneeJoint = jointPositions[2]
 
-        zero_v = np.zeros(3)
+        zeroVec = np.zeros(3)
 
         T_0_1 = tf.getTransFromRp(tf.rodriguesEquation(self.E, targetLeg.axisMatrix[0], abadJoint), targetLeg.firstJointOrigin)
-        T_0_2 = T_0_1.dot(tf.getTransFromRp(tf.rodriguesEquation(self.E, targetLeg.axisMatrix[1], hipJoint), zero_v))
+        T_0_2 = T_0_1.dot(tf.getTransFromRp(tf.rodriguesEquation(self.E, targetLeg.axisMatrix[1], hipJoint), zeroVec))
         T_0_3 = T_0_2.dot(tf.getTransFromRp(tf.rodriguesEquation(self.E, targetLeg.axisMatrix[2], kneeJoint), [0, 0, -self.L1]))
         T_0_4 = T_0_3.dot(tf.getTransFromRp(np.eye(3, 3), [0, 0, -self.L2]))
 
         if fullReturn:
-          return T_0_1, T_0_2, T_0_3, T_0_4
+            return T_0_1, T_0_2, T_0_3, T_0_4
         else:
-          return tf.getRotationAndPositionFromT(T_0_4)
+            return tf.getRotationAndPositionFromT(T_0_4)
 
-    def inverseKinematics(self, position_ref, targetLeg):
+    def inverseKinematics(self, posRef, targetLeg):
         q = targetLeg.getJointPositions()
-        _, position = self.forwardKinematics(q, targetLeg)
-        dp = position_ref - position
+        _, pos = self.forwardKinematics(q, targetLeg)
+        dp = posRef - pos
 
         dq = self.jacobi_lambda * la.inv(self.jacobian(q, targetLeg)).dot(dp)
         return q + dq
@@ -180,16 +184,16 @@ class Quadruped(Robot):
       J = np.vstack((np.cross(wa[0], (p[-1]-p[0])), np.cross(wa[1], (p[-1]-p[1])), np.cross(wa[2], (p[-1]-p[2])))).T
       return J
 
-    def initializer(self, initialFootPrints, initialPosition, initialOrientation,
-                    initialJointPosition=np.array([0.,0.2,-0.4]), initializeTime=1.):
+    def initializer(self, initialFootPrints, initialPos, initialOrn,
+                    initialJointPos=np.array([0.,0.2,-0.4]), initializeTime=1.):
 
         for _ in np.arange(0, initializeTime / self.timeStep, 1):
-            self.resetRobotPositionAndOrientation(initialPosition, initialOrientation)
+            self.resetRobotPositionAndOrientation(initialPos, initialOrn)
 
-            self.legRF.setJointPositions(initialJointPosition)
-            self.legLF.setJointPositions(initialJointPosition)
-            self.legRH.setJointPositions(initialJointPosition)
-            self.legLH.setJointPositions(initialJointPosition)
+            self.legRF.setJointPositions(initialJointPos)
+            self.legLF.setJointPositions(initialJointPos)
+            self.legRH.setJointPositions(initialJointPos)
+            self.legLH.setJointPositions(initialJointPos)
             self.oneStep()
 
         for _ in np.arange(0, initializeTime / self.timeStep, 1):
