@@ -2,14 +2,14 @@ import numpy as np
 import scipy.linalg as la
 
 
-def trajectoryGenerator(startPointVector, endPointVector, startVelocityVector_xy, endVelocityVector,
+def trajectoryGenerator(startPointVec, endPointVec, startVelocityVec_xy, endVelocityVec,
                         zheight, startTime, endTime, dt):
 
-    x = trajectoryGenerator_xy(startPointVector[0], endPointVector[0], startVelocityVector_xy[0], endVelocityVector[0],
+    x = trajectoryGenerator_xy(startPointVec[0], endPointVec[0], startVelocityVec_xy[0], endVelocityVec[0],
                                startTime, endTime, dt)
-    y = trajectoryGenerator_xy(startPointVector[1], endPointVector[1], startVelocityVector_xy[1], endVelocityVector[1],
+    y = trajectoryGenerator_xy(startPointVec[1], endPointVec[1], startVelocityVec_xy[1], endVelocityVec[1],
                                startTime, endTime, dt)
-    z = trajectoryGenerator_z(zheight, startPointVector[2], endPointVector[2], endVelocityVector[2],
+    z = trajectoryGenerator_z(zheight, startPointVec[2], endPointVec[2], endVelocityVec[2],
                               startTime, endTime, dt)
 
     return np.vstack((x, y, z)).T

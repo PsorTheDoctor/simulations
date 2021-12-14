@@ -33,10 +33,10 @@ def walk():
 
     trjR_log = np.empty((0, 3), float)
     trjL_log = np.empty((0, 3), float)
-    walkingCycle = 100
+    walkingCycle = 50
     supPoint = np.array([0., 0.065])
 
-    for w in range(walkingCycle):
+    for _ in range(walkingCycle):
         # Generates one cycle trajectory
         CoM_trj, footTrjL, footTrjR = pre.footPrintAndCoM_trajectoryGenerator(inputTargetZMP=supPoint,
                                                                               inputFootPrint=supPoint)
@@ -44,13 +44,14 @@ def walk():
         trjR_log = np.vstack((trjR_log, footTrjR))
         trjL_log = np.vstack((trjL_log, footTrjL))
 
-        CoM_len = len(CoM_trj)
-        for i in range(CoM_len):
+        for i in range(len(CoM_trj)):
             targetPosR = footTrjR[i] - CoM_trj[i]
             targetPosL = footTrjL[i] - CoM_trj[i]
 
             posR = biped.inverseKinematics(targetPosR, targetRPY, biped.R)
+            print("POS R:", posR)
             posL = biped.inverseKinematics(targetPosL, targetRPY, biped.L)
+            print("POS L:", posL)
             biped.setLeftLegJointPositions(posL)
             biped.setRightLegJointPositions(posR)
             biped.oneStep()
@@ -62,4 +63,4 @@ def walk():
 
 
 if __name__ == '__main__':
-    stand_up()
+    walk()

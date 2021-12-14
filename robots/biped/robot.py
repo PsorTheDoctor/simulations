@@ -92,7 +92,7 @@ class Biped(Robot):
     def torqueControllModeEnableForAll(self):
         p.setJointMotorControlArray(self.robotId, jointIndices=self.jointIdList, controlMode=p.VELOCITY_CONTROL,
                                     forces=[0] * 12)
-        self._controlMode = p.TORQUE_CONTROL
+        self.controlMode = p.TORQUE_CONTROL
 
     def getLegTrans(self, jointPositions, leg):
         hipyaw = jointPositions[0]
@@ -114,6 +114,7 @@ class Biped(Robot):
 
     def forwardKinematics(self, jointPositions, leg):
         T_0_6 = self.getLegTrans(jointPositions, leg)[5]
+
         return tf.getRotationAndPositionFromT(T_0_6)
 
     def inverseKinematics(self, p_ref, omega_ref, leg):
