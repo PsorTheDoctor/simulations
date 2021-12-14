@@ -10,14 +10,13 @@ def push_ups():
 
     qdrp = Quadruped(timeStep=1./240., initialCoM_height=0.3, startPos=[0,0,0.55],
                      startOrn=[0.,0.,0.], maxForce=12, robotPath='quadruped.urdf')
-    dt = 0.001
-
-    while True:
+    dp = 0.001
+    for _ in range(3):
         for _ in np.arange(0, 0.1, 0.001):
-            targetPosLF[2] += dt
-            targetPosRF[2] += dt
-            targetPosLH[2] += dt
-            targetPosRH[2] += dt
+            targetPosLF[2] += dp
+            targetPosRF[2] += dp
+            targetPosLH[2] += dp
+            targetPosRH[2] += dp
 
             LFjointPositions = qdrp.inverseKinematics(targetPosLF, targetLeg=qdrp.legLF)
             RFjointPositions = qdrp.inverseKinematics(targetPosRF, targetLeg=qdrp.legRF)
@@ -31,10 +30,10 @@ def push_ups():
             qdrp.oneStep()
 
         for _ in np.arange(0, 0.1, 0.001):
-            targetPosLF[2] -= dt
-            targetPosRF[2] -= dt
-            targetPosLH[2] -= dt
-            targetPosRH[2] -= dt
+            targetPosLF[2] -= dp
+            targetPosRF[2] -= dp
+            targetPosLH[2] -= dp
+            targetPosRH[2] -= dp
 
             LFjointPositions = qdrp.inverseKinematics(targetPosLF, targetLeg=qdrp.legLF)
             RFjointPositions = qdrp.inverseKinematics(targetPosRF, targetLeg=qdrp.legRF)
@@ -46,6 +45,8 @@ def push_ups():
             qdrp.legLH.setJointPositions(LHjointPositions)
             qdrp.legRH.setJointPositions(RHjointPositions)
             qdrp.oneStep()
+
+    qdrp.disconnect()
 
 
 if __name__ == '__main__':

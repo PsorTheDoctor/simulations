@@ -5,8 +5,8 @@ import time
 
 
 def contact():
-    tip_z_position = p.getLinkState(hopperId, tipLink)[0][2]
-    if tip_z_position < 0.012:
+    tip_z_pos = p.getLinkState(hopperId, tipLink)[0][2]
+    if tip_z_pos < 0.012:
         return True
     else:
         return False
@@ -22,12 +22,12 @@ def getVelocity():
 
 def getTargetLegDisplacement():
     vel = getVelocity()[0:2]
-    vel_error = vel - targetVelocity
+    vel_error = vel - targetVel
     vel_gain = 0.027
 
     neural_point = (vel * stance_duration) / 2.0
     disp = neural_point + vel_gain * vel_error
-    disp = np.append(disp, -np.sqrt(getLegLength()**2-disp[0]**2-disp[1]**2))
+    disp = np.append(disp, -np.sqrt(getLegLength()**2 - disp[0]** - disp[1]**2))
     return disp
 
 
@@ -65,14 +65,14 @@ hip_joint_kd = 0.5
 p.connect(p.GUI)
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
 
-targetVelocityX = p.addUserDebugParameter('Target velocity X', -0.3, 0.3, 0)
-targetVelocityY = p.addUserDebugParameter('Target velocity Y', -0.3, 0.3, 0)
-springHardness = p.addUserDebugParameter('Spring hardness', 0, 2000, 1000)
+targetVelX = p.addUserDebugParameter('Target velocity X', -0.3, 0.3, 0)
+targetVelY = p.addUserDebugParameter('Target velocity Y', -0.3, 0.3, 0)
+actuatorSoftness = p.addUserDebugParameter('Actuator softness', 0, 2000, 1000)
 
 planeId = p.loadURDF('plane.urdf')
 p.changeDynamics(planeId, -1, lateralFriction=60)
-p.resetDebugVisualizerCamera(cameraDistance=1.62, cameraYaw=47.6, cameraPitch=-30.8,
-                             cameraTargetPosition=[0.43, 1.49, -0.25])
+p.resetDebugVisualizerCamera(cameraDistance=1.0, cameraYaw=135, cameraPitch=-30,
+                             cameraTargetPosition=[0, 0, 0])
 
 hopperId = p.loadURDF('../data/hopper.urdf', [0, 0, 0.2], [0, 0.001, 0, 1])
 
@@ -86,12 +86,12 @@ prev_orientation = np.array([0, 0, 0])
 count = 0
 stance_made = False
 stance_duration = 0.17
-targetVelocity = np.array([0.3, 0.3])
+targetVel = np.array([0.3, 0.3])
 
 while True:
     count = count + 1
     curtime = curtime + dt
-    position = p.getJointState(hopperId, pneumatic_joint)[0]
+    pos = p.getJointState(hopperId, pneumatic_joint)[0]
 
     if contact():  # stance phase
         if not stance_made:
@@ -102,10 +102,10 @@ while True:
         base_orientation_euler = np.array(p.getEulerFromQuaternion(base_orientation))
 
         orientation_change = base_orientation_euler - prev_orientation
-        orientation_velocity = orientation_change / dt
+        orientation_vel = orientation_change / dt
 
-        outer_hip_joint_target_vel = -hip_joint_kp * base_orientation_euler[0] - hip_joint_kd * orientation_velocity[0]
-        inner_hip_joint_target_vel = -hip_joint_kp * base_orientation_euler[1] - hip_joint_kd * orientation_velocity[1]
+        outer_hip_joint_target_vel = -hip_joint_kp * base_orientation_euler[0] - hip_joint_kd * orientation_vel[0]
+        inner_hip_joint_target_vel = -hip_joint_kp * base_orientation_euler[1] - hip_joint_kd * orientation_vel[1]
 
         p.setJointMotorControl2(hopperId, outer_hip_joint, p.VELOCITY_CONTROL,
                                 targetVelocity=outer_hip_joint_target_vel)
@@ -113,11 +113,11 @@ while True:
                                 targetVelocity=inner_hip_joint_target_vel)
 
         prev_orientation = base_orientation_euler
-        legForce = -k * position - 20
+        legForce = -k * pos - 20
 
     else:  # flight phase
         stance_made = False
-        legForce = -k * position
+        legForce = -k * pos
         targetLegDisplacement_H = getTargetLegDisplacement()
         targetLegDisplacement_H = np.append(targetLegDisplacement_H, 1)
         targetLegDisplacement_H = np.matrix(targetLegDisplacement_H)
@@ -139,9 +139,9 @@ while True:
 
     p.setJointMotorControl2(hopperId, pneumatic_joint, p.TORQUE_CONTROL, force=legForce)
 
-    targetVelocity[0] = p.readUserDebugParameter(targetVelocityX)
-    targetVelocity[1] = p.readUserDebugParameter(targetVelocityY)
-    k = p.readUserDebugParameter(springHardness)
+    targetVel[0] = p.readUserDebugParameter(targetVelX)
+    targetVel[1] = p.readUserDebugParameter(targetVelY)
+    k = p.readUserDebugParameter(actuatorSoftness)
 
     p.stepSimulation()
     time.sleep(dt)

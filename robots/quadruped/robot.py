@@ -174,15 +174,15 @@ class Quadruped(Robot):
         return q + dq
 
     def jacobian(self, q, targetLeg):
-      T_0_E = self.forwardKinematics(q, targetLeg, fullReturn=True)
+        T_0_E = self.forwardKinematics(q, targetLeg, fullReturn=True)
 
-      R = [tf.getRotationFromT(T_0_E[i]) for i in range(len(T_0_E))]
-      p = [tf.getPositionFromT(T_0_E[i]) for i in range(len(T_0_E))]
+        R = [tf.getRotationFromT(T_0_E[i]) for i in range(len(T_0_E))]
+        p = [tf.getPositionFromT(T_0_E[i]) for i in range(len(T_0_E))]
 
-      wa = [R[i].dot(targetLeg.axisMatrix[i]) for i in range(targetLeg.DoF)]
+        wa = [R[i].dot(targetLeg.axisMatrix[i]) for i in range(targetLeg.DoF)]
 
-      J = np.vstack((np.cross(wa[0], (p[-1]-p[0])), np.cross(wa[1], (p[-1]-p[1])), np.cross(wa[2], (p[-1]-p[2])))).T
-      return J
+        J = np.vstack((np.cross(wa[0], (p[-1]-p[0])), np.cross(wa[1], (p[-1]-p[1])), np.cross(wa[2], (p[-1]-p[2])))).T
+        return J
 
     def initializer(self, initialFootPrints, initialPos, initialOrn,
                     initialJointPos=np.array([0.,0.2,-0.4]), initializeTime=1.):
