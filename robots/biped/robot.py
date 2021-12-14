@@ -11,9 +11,10 @@ class Robot:
                  controlMode=p.POSITION_CONTROL, planePath='plane.urdf'):
         p.connect(p.GUI)
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
-        p.setGravity(0, 0, -9.8)
+        p.setGravity(0, 0, -9.81)
 
-        self.planeId = p.loadURDF(planePath)
+        self.incline = 0.0
+        self.planeId = p.loadURDF(planePath, [0,0,0], p.getQuaternionFromEuler([0, self.incline, 0]))
         p.changeDynamics(self.planeId, -1, lateralFriction=60)
 
         self.robotId = p.loadURDF(robotPath, startPos, p.getQuaternionFromEuler(startOrn))
@@ -26,6 +27,8 @@ class Robot:
         self.maxForce = maxForce
         self.maxForceList = [maxForce] * 12
         self.stride = p.addUserDebugParameter('Stride', 0, 0.2, 0.1)
+        self.stepHeight = p.addUserDebugParameter('Step height', 0.03, 0.1, 0.04)
+
         self.timeStep = 1. / 240.
 
     def getEuler(self):
@@ -42,6 +45,9 @@ class Robot:
 
     def getStride(self):
         return p.readUserDebugParameter(self.stride)
+
+    def getStepHeight(self):
+        return p.readUserDebugParameter(self.stepHeight)
 
     def resetRobotPositionAndOrientation(self, pos, orn):
         p.resetBasePositionAndOrientation(self.robotId, pos, orn)
@@ -77,8 +83,8 @@ class Biped(Robot):
         self.L = np.array([0, 0.065, -0.175]) - CoM_pos
         self.legDoF = 6
 
-        self.jointIdListR = [0,1,2,3,4,5]
-        self.jointIdListL = [6,7,8,9,10,11]
+        self.jointIdListR = [0, 1, 2, 3, 4, 5]
+        self.jointIdListL = [6, 7, 8, 9, 10, 11]
         self.maxForceListForLeg = [maxForce] * self.legDoF
 
         self.a = np.array([[0,0,1], [1,0,0], [0,1,0],

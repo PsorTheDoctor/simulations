@@ -5,7 +5,7 @@ import robots.biped.trajectory as trj
 
 
 class PreviewControl:
-    def __init__(self, dt=1./240., Tsup_time=0.5, Tdl_time=0.1, CoM_height=0.45, g=9.8, previewStepNum=240,
+    def __init__(self, dt=1./240., Tsup_time=0.5, Tdl_time=0.1, CoM_height=0.45, g=9.81, previewStepNum=240,
                  initialTargetZMP=np.array([0.,0.]), R=np.matrix([1.]), Q=np.matrix([[7000,0,0,0],
                                                                                      [0,1,0,0],
                                                                                      [0,0,1,0],
@@ -65,7 +65,9 @@ class PreviewControl:
         self.targetZMP_old = np.array([initialTargetZMP])
         self.currentFootStep = 0
 
-    def footPrintAndCoM_trajectoryGenerator(self, inputTargetZMP, inputFootPrint):
+        self.z_height = 0.4
+
+    def footPrintAndCoM_trajectoryGenerator(self, inputTargetZMP, inputFootPrint, stepHeight=0.04):
         currentFootStep = 0
         self.footPrints = self.footOneStep(self.footPrints, inputFootPrint, self.supportLeg)
 
@@ -119,7 +121,8 @@ class PreviewControl:
                                                          np.array([0., 0., 0.]),
                                                          np.array([0., 0., 0.]),
                                                          np.hstack((self.footPrints[currentFootStep, self.supportLeg], 0.)),
-                                                         self.swingLeg)
+                                                         self.swingLeg,
+                                                         stepHeight=stepHeight)
 
         self.swingLeg, self.supportLeg = self.changeSupportLeg(self.swingLeg, self.supportLeg)
         self.targetZMP_old = np.vstack((self.targetZMP_old, inputTargetZMP))
@@ -139,7 +142,7 @@ class PreviewControl:
         return px_ref, py_ref
 
     def footTrajectoryGenerator(self, startPointV, endPointV, startRobotVelocityV, endRobotVelocityV,
-                                supportPointV, swingLeg, zheight=0.04):
+                                supportPointV, swingLeg, stepHeight=0.4):
         supportTrj = np.vstack((np.full(self.Tdl + self.Tsup, supportPointV[0]),
                                 np.full(self.Tdl + self.Tsup, supportPointV[1]),
                                 np.full(self.Tdl + self.Tsup, supportPointV[2]))).T
@@ -154,7 +157,7 @@ class PreviewControl:
                                            np.full(self.Tsup, startPointV[2]))).T
         else:
             trajectoryForTsup = trj.trajectoryGenerator(startPointV, endPointV, -startRobotVelocityV, -endRobotVelocityV,
-                                                        zheight, 0., self.Tsup * self.dt, self.dt)
+                                                        stepHeight, 0., self.Tsup * self.dt, self.dt)
         trjL = None
         trjR = None
         if swingLeg is self.RIGHT_LEG:
