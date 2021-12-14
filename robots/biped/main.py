@@ -23,7 +23,6 @@ def stand_up():
 def walk():
     biped = Biped()
     # CoM_height = 0.45
-    stride = 0.1
     # CoM_to_body = np.array([0.0, 0.0, 0.0])
 
     targetRPY = [0.0, 0.0, 0.0]
@@ -33,10 +32,9 @@ def walk():
 
     trjR_log = np.empty((0, 3), float)
     trjL_log = np.empty((0, 3), float)
-    walkingCycle = 50
     supPoint = np.array([0., 0.065])
 
-    for _ in range(walkingCycle):
+    while True:
         # Generates one cycle trajectory
         CoM_trj, footTrjL, footTrjR = pre.footPrintAndCoM_trajectoryGenerator(inputTargetZMP=supPoint,
                                                                               inputFootPrint=supPoint)
@@ -56,10 +54,10 @@ def walk():
             biped.setRightLegJointPositions(posR)
             biped.oneStep()
 
-        supPoint[0] += stride
+        supPoint[0] += biped.getStride()
         supPoint[1] = -supPoint[1]
 
-    biped.disconnect()
+    # biped.disconnect()
 
 
 if __name__ == '__main__':

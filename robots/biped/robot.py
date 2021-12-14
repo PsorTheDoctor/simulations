@@ -11,7 +11,7 @@ class Robot:
                  controlMode=p.POSITION_CONTROL, planePath='plane.urdf'):
         p.connect(p.GUI)
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
-        p.setGravity(0, 0, -9.81)
+        p.setGravity(0, 0, -9.8)
 
         self.planeId = p.loadURDF(planePath)
         p.changeDynamics(self.planeId, -1, lateralFriction=60)
@@ -25,6 +25,7 @@ class Robot:
 
         self.maxForce = maxForce
         self.maxForceList = [maxForce] * 12
+        self.stride = p.addUserDebugParameter('Stride', 0, 0.2, 0.1)
         self.timeStep = 1. / 240.
 
     def getEuler(self):
@@ -38,6 +39,9 @@ class Robot:
     def getRobotPosition(self):
         pos, _ = p.getBasePositionAndOrientation(self.robotId)
         return pos
+
+    def getStride(self):
+        return p.readUserDebugParameter(self.stride)
 
     def resetRobotPositionAndOrientation(self, pos, orn):
         p.resetBasePositionAndOrientation(self.robotId, pos, orn)

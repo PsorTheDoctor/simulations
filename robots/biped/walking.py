@@ -5,12 +5,11 @@ import robots.biped.trajectory as trj
 
 
 class PreviewControl:
-    def __init__(self, dt=1./240., Tsup_time=0.5, Tdl_time=0.1, CoM_height=0.45, g=9.81, previewStepNum=240,
-                 initialTargetZMP=np.array([0.,0.]), initialFootPrint=np.array([[[0.,0.065],[0.,-0.065]]]),
-                 R=np.array([1.]), Q=np.array([[7000,0,0,0],
-                                               [0,1,0,0],
-                                               [0,0,1,0],
-                                               [0,0,0,1]])):
+    def __init__(self, dt=1./240., Tsup_time=0.5, Tdl_time=0.1, CoM_height=0.45, g=9.8, previewStepNum=240,
+                 initialTargetZMP=np.array([0.,0.]), R=np.matrix([1.]), Q=np.matrix([[7000,0,0,0],
+                                                                                     [0,1,0,0],
+                                                                                     [0,0,1,0],
+                                                                                     [0,0,0,1]])):
         self.RIGHT_LEG = 1
         self.LEFT_LEG = 0
         self.dt = dt
@@ -82,10 +81,10 @@ class PreviewControl:
 
         for i in range(len(input_px_ref)):
             dpx_ref = self.px_ref[i + 1] - self.px_ref[i]
-            dpy_ref = self.px_ref[i + 1] - self.px_ref[i]
+            dpy_ref = self.py_ref[i + 1] - self.py_ref[i]
 
             xe = self.px_ref[i] - self.C * self.x
-            ye = self.px_ref[i] - self.C * self.y
+            ye = self.py_ref[i] - self.C * self.y
 
             X = self.phi * np.vstack((xe, self.dx)) + self.G * self.xdu + self.Gr * dpx_ref
             Y = self.phi * np.vstack((ye, self.dy)) + self.G * self.ydu + self.Gr * dpy_ref
