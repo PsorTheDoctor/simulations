@@ -28,19 +28,39 @@ def squat():
 
     dp = 0.002
     while True:
-        for _ in np.arange(0, 0.1, 0.001):
+        for _ in range(100):
             biped.setLegPositions(targetPosL, targetPosR, targetRPY)
             biped.oneStep()
-
             targetPosL[2] += dp
             targetPosR[2] += dp
 
-        for _ in np.arange(0, 0.1, 0.001):
+        for _ in range(100):
             biped.setLegPositions(targetPosL, targetPosR, targetRPY)
             biped.oneStep()
-
             targetPosL[2] -= dp
             targetPosR[2] -= dp
+
+
+def torsoTwist():
+    biped = Biped()
+    CoM_height = 0.45
+
+    targetRPY = [0.0, 0.0, -0.25]
+    targetPosL = [0.0, 0.065, -CoM_height]
+    targetPosR = [0.0, -0.065, -CoM_height]
+    biped.positionInitialize(initializeTime=0.1)
+
+    dp = 0.005
+    while True:
+        for _ in range(100):
+            biped.setLegPositions(targetPosL, targetPosR, targetRPY)
+            biped.oneStep()
+            targetRPY[2] += dp
+
+        for _ in range(100):
+            biped.setLegPositions(targetPosL, targetPosR, targetRPY)
+            biped.oneStep()
+            targetRPY[2] -= dp
 
 
 def walk():
@@ -80,4 +100,4 @@ def walk():
 
 
 if __name__ == '__main__':
-    walk()
+    torsoTwist()
