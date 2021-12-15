@@ -9,6 +9,7 @@ import scipy.linalg as la
 class Robot:
     def __init__(self, robotPath, startPos, startOrn, maxForce,
                  controlMode=p.POSITION_CONTROL, planePath='plane.urdf'):
+        p.connect(p.SHARED_MEMORY)
         p.connect(p.GUI)
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
         p.setGravity(0, 0, -9.81)
@@ -98,6 +99,12 @@ class Biped(Robot):
     def setLeftLegJointPositions(self, targetJointPositions):
         p.setJointMotorControlArray(self.robotId, jointIndices=self.jointIdListL, controlMode=self.controlMode,
                                    forces=self.maxForceListForLeg, targetPositions=targetJointPositions)
+
+    def setLegPositions(self, targetPosL, targetPosR, targetRPY):
+        posL = self.inverseKinematics(targetPosL, targetRPY, self.L)
+        posR = self.inverseKinematics(targetPosR, targetRPY, self.R)
+        self.setLeftLegJointPositions(posL)
+        self.setRightLegJointPositions(posR)
 
     def torqueControllModeEnableForAll(self):
         p.setJointMotorControlArray(self.robotId, jointIndices=self.jointIdList, controlMode=p.VELOCITY_CONTROL,

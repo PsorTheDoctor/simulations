@@ -22,9 +22,9 @@ def trajectoryGenerator_xy(startPoint, endPoint, startVel, endVel, startTime, en
     A = np.matrix([startPoint, endPoint, startVel, endVel]).T
 
     B = np.matrix([[startTime**3, startTime**2, startTime, 1],
-                  [endTime**3, endTime**2, endTime, 1],
-                  [3 * (startTime**2), 2 * startTime, 1, 0],
-                  [3 * (endTime**2), 2 * endTime, 1, 0]])
+                   [endTime**3, endTime**2, endTime, 1],
+                   [3 * (startTime**2), 2 * startTime, 1, 0],
+                   [3 * (endTime**2), 2 * endTime, 1, 0]])
 
     C = la.inv(B) * A
 
@@ -41,9 +41,9 @@ def trajectoryGenerator_z(zheight, startPoint, endPoint, endVel, startTime, endT
     A = np.matrix([zh, endPoint, startPoint, endVel]).T
 
     B = np.matrix([[heightTime**3, heightTime**2, heightTime, 1],
-                  [endTime**3, endTime**2, endTime, 1],
-                  [startTime**3, startTime**2, startTime, 1],
-                  [3 * (endTime**2), 2 * endTime, 1, 0]])
+                   [endTime**3, endTime**2, endTime, 1],
+                   [startTime**3, startTime**2, startTime, 1],
+                   [3 * (endTime**2), 2 * endTime, 1, 0]])
 
     C = la.inv(B) * A
 

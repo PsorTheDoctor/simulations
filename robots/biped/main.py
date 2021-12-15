@@ -3,7 +3,7 @@ from robots.biped.robot import Biped
 from robots.biped.walking import PreviewControl
 
 
-def stand_up():
+def stand():
     biped = Biped()
     CoM_height = 0.45
 
@@ -13,11 +13,34 @@ def stand_up():
     biped.positionInitialize(initializeTime=0.2)
 
     while True:
-        posL = biped.inverseKinematics(targetPosL, targetRPY, biped.L)
-        posR = biped.inverseKinematics(targetPosR, targetRPY, biped.R)
-        biped.setLeftLegJointPositions(posL)
-        biped.setRightLegJointPositions(posR)
+        biped.setLegPositions(targetPosL, targetPosR, targetRPY)
         biped.oneStep()
+
+
+def squat():
+    biped = Biped()
+    CoM_height = 0.45
+
+    targetRPY = [0.0, 0.0, 0.0]
+    targetPosL = [0.0, 0.065, -CoM_height]
+    targetPosR = [0.0, -0.065, -CoM_height]
+    biped.positionInitialize(initializeTime=0.1)
+
+    dp = 0.002
+    while True:
+        for _ in np.arange(0, 0.1, 0.001):
+            biped.setLegPositions(targetPosL, targetPosR, targetRPY)
+            biped.oneStep()
+
+            targetPosL[2] += dp
+            targetPosR[2] += dp
+
+        for _ in np.arange(0, 0.1, 0.001):
+            biped.setLegPositions(targetPosL, targetPosR, targetRPY)
+            biped.oneStep()
+
+            targetPosL[2] -= dp
+            targetPosR[2] -= dp
 
 
 def walk():
@@ -26,7 +49,7 @@ def walk():
     # CoM_to_body = np.array([0.0, 0.0, 0.0])
 
     targetRPY = [0.0, 0.0, 0.0]
-    pre = PreviewControl(Tsup_time=0.3, Tdl_time=0.1, previewStepNum=190)
+    pre = PreviewControl(dt=1./240., Tsup_time=0.3, Tdl_time=0.1, previewStepNum=190)
     biped.positionInitialize(initializeTime=0.2)
     CoM_trajectory = np.empty((0, 3), float)
 
@@ -45,20 +68,15 @@ def walk():
         trjR_log = np.vstack((trjR_log, footTrjR))
         trjL_log = np.vstack((trjL_log, footTrjL))
 
-        for i in range(len(CoM_trj)):
-            targetPosR = footTrjR[i] - CoM_trj[i]
-            targetPosL = footTrjL[i] - CoM_trj[i]
+        for j in range(len(CoM_trj)):
+            targetPosR = footTrjR[j] - CoM_trj[j]
+            targetPosL = footTrjL[j] - CoM_trj[j]
 
-            posR = biped.inverseKinematics(targetPosR, targetRPY, biped.R)
-            posL = biped.inverseKinematics(targetPosL, targetRPY, biped.L)
-            biped.setLeftLegJointPositions(posL)
-            biped.setRightLegJointPositions(posR)
+            biped.setLegPositions(targetPosL, targetPosR, targetRPY)
             biped.oneStep()
 
         supPoint[0] += biped.getStride()
         supPoint[1] = -supPoint[1]
-
-    # biped.disconnect()
 
 
 if __name__ == '__main__':
