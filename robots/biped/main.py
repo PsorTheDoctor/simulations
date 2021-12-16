@@ -13,6 +13,10 @@ def stand():
     biped.positionInitialize(initializeTime=0.2)
 
     while True:
+        incline = biped.getIncline()
+        biped.resetIncline(incline)
+        targetRPY[1] = incline
+
         biped.setLegPositions(targetPosL, targetPosR, targetRPY)
         biped.oneStep()
 
@@ -28,6 +32,10 @@ def squat():
 
     dp = 0.002
     while True:
+        incline = biped.getIncline()
+        biped.resetIncline(incline)
+        targetRPY[1] = incline
+
         for _ in range(100):
             biped.setLegPositions(targetPosL, targetPosR, targetRPY)
             biped.oneStep()
@@ -52,6 +60,10 @@ def torsoTwist():
 
     dp = 0.005
     while True:
+        incline = biped.getIncline()
+        biped.resetIncline(incline)
+        targetRPY[1] = incline
+
         for _ in range(100):
             biped.setLegPositions(targetPosL, targetPosR, targetRPY)
             biped.oneStep()
@@ -78,6 +90,10 @@ def walk():
     supPoint = np.array([0., 0.065])
 
     while True:
+        incline = biped.getIncline()
+        biped.resetIncline(incline)
+        targetRPY[1] = incline
+
         stepHeight = biped.getStepHeight()
 
         # Generates one cycle trajectory
@@ -100,4 +116,4 @@ def walk():
 
 
 if __name__ == '__main__':
-    torsoTwist()
+    walk()

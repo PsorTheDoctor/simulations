@@ -14,7 +14,7 @@ class Robot:
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
         p.setGravity(0, 0, -9.81)
 
-        self.incline = 0.0
+        self.incline = p.addUserDebugParameter("Incline", -0.1, 0.1, 0)
         self.planeId = p.loadURDF(planePath, [0,0,0], p.getQuaternionFromEuler([0, self.incline, 0]))
         p.changeDynamics(self.planeId, -1, lateralFriction=60)
 
@@ -44,6 +44,9 @@ class Robot:
         pos, _ = p.getBasePositionAndOrientation(self.robotId)
         return pos
 
+    def getIncline(self):
+        return p.readUserDebugParameter(self.incline)
+
     def getStride(self):
         return p.readUserDebugParameter(self.stride)
 
@@ -52,6 +55,10 @@ class Robot:
 
     def resetRobotPositionAndOrientation(self, pos, orn):
         p.resetBasePositionAndOrientation(self.robotId, pos, orn)
+
+    def resetIncline(self, incline):
+        p.resetBasePositionAndOrientation(self.planeId, [0,0,0],
+                                          p.getQuaternionFromEuler([0, incline, 0]))
 
     def setMotorTorqueByArray(self, targetJointTorqueList):
         if self.controlMode is p.TORQUE_CONTROL:
@@ -106,7 +113,7 @@ class Biped(Robot):
         self.setLeftLegJointPositions(posL)
         self.setRightLegJointPositions(posR)
 
-    def torqueControllModeEnableForAll(self):
+    def torqueControlModeEnableForAll(self):
         p.setJointMotorControlArray(self.robotId, jointIndices=self.jointIdList, controlMode=p.VELOCITY_CONTROL,
                                     forces=[0] * 12)
         self.controlMode = p.TORQUE_CONTROL
