@@ -49,6 +49,39 @@ def squat():
             targetPosR[2] -= dp
 
 
+def jump(withTorsoTwist=False):
+    biped = Biped()
+    CoM_height = 0.45
+
+    targetRPY = [0.0, 0.0, 0.0]
+    targetPosL = [0.0, 0.065, -CoM_height]
+    targetPosR = [0.0, -0.065, -CoM_height]
+    biped.positionInitialize(initializeTime=0.1)
+
+    dp = 0.0025
+    dRPY = 0.0065
+    while True:
+        incline = biped.getIncline()
+        biped.resetIncline(incline)
+        targetRPY[1] = incline
+
+        for _ in range(60):
+            biped.setLegPositions(targetPosL, targetPosR, targetRPY)
+            biped.oneStep()
+            targetPosL[2] += dp
+            targetPosR[2] += dp
+            if withTorsoTwist:
+                targetRPY[2] += dRPY
+
+        for _ in range(60):
+            biped.setLegPositions(targetPosL, targetPosR, targetRPY)
+            biped.oneStep()
+            targetPosL[2] -= dp
+            targetPosR[2] -= dp
+            if withTorsoTwist:
+                targetRPY[2] -= dRPY
+
+
 def torsoTwist():
     biped = Biped()
     CoM_height = 0.45
@@ -116,4 +149,4 @@ def walk():
 
 
 if __name__ == '__main__':
-    walk()
+    jump(withTorsoTwist=True)
