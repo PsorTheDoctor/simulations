@@ -48,8 +48,12 @@ def createDataset(filename, numSamples):
             for joint in range(numJoints):
                 p.resetJointState(robot, joint, jointPositions[joint])
 
+            decimals = 4
             with open(filename, 'a') as f:
-                f.write('id: {} joints: {}\n'.format(i, np.round_(jointPositions, 4)))
+                line = 'id: {} joints: '.format(i)
+                for joint in jointPositions:
+                    line += str(round(joint, decimals)) + ' '
+                f.write(line + '\n')
 
             # for joint in range(numJoints):
             #     pos = p.getJointState(robot, joint)[0]
@@ -70,7 +74,7 @@ def createDataset(filename, numSamples):
 
             img = p.getCameraImage(224, 224)[2]
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            cv2.imwrite('images/{}.jpg'.format(i), gray)
+            cv2.imwrite('images2/{}.jpg'.format(i), gray)
 
             lastTime = currentTime
             i += 1
@@ -80,4 +84,4 @@ def createDataset(filename, numSamples):
     p.disconnect()
 
 
-createDataset('report.txt', 10000)
+createDataset('report2.txt', 10000)
