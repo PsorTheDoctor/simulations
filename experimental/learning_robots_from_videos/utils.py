@@ -41,11 +41,12 @@ def createDataset(filename, numSamples):
             p.changeVisualShape(table, -1, rgbaColor=randomColor())
 
             color = randomColor()
+            jointPositions = np.random.rand(numJoints) * 2.
+
             for joint in range(numJoints):
                 p.changeVisualShape(robot, joint, rgbaColor=color)
 
-            jointPositions = np.random.rand(14) * 3.5 * random.random()
-            for joint in range(numJoints):
+                jointPositions[joint] *= random.choice((-1, 1))
                 p.resetJointState(robot, joint, jointPositions[joint])
 
             decimals = 4
