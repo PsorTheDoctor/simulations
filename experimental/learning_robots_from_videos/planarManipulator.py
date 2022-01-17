@@ -2,9 +2,9 @@ import pygame
 import math
 import random
 
-width = 224
-height = 224
-r = 60
+width = 140
+height = 140
+r = 35
 angle1 = 0
 angle2 = 0
 
@@ -14,7 +14,7 @@ clock = pygame.time.Clock()
 
 
 def createDataset(samples):
-    with open('planarManipulator/report.txt', 'w') as f:
+    with open('planarManipulator2/report.txt', 'w') as f:
         f.truncate(0)  # clears a file!
 
     for i in range(samples):
@@ -25,8 +25,12 @@ def createDataset(samples):
             if event.type == pygame.QUIT:
                 pygame.quit()
 
-        angle1 = 2 * math.pi * random.random() * random.choice((-1, 1))
-        angle2 = 2 * math.pi * random.random() * random.choice((-1, 1))
+        # Angle values in range (-6.28, 6.28) for actual control
+        # Joint values in range (-1, 1) for dataset labeling
+        joint1 = random.random() * random.choice((-1, 1))
+        angle1 = 2 * math.pi * joint1
+        joint2 = random.random() * random.choice((-1, 1))
+        angle2 = 2 * math.pi * joint2
 
         startX = width / 2
         startY = height / 2
@@ -35,15 +39,15 @@ def createDataset(samples):
         endX = int(midX + r * math.sin(angle2))
         endY = int(midY + r * math.cos(angle2))
 
-        pygame.draw.line(screen, (255, 255, 255), (startX, startY), (midX, midY), width=10)
-        pygame.draw.line(screen, (255, 255, 255), (midX, midY), (endX, endY), width=10)
+        pygame.draw.line(screen, (255, 255, 255), (startX, startY), (midX, midY), width=5)
+        pygame.draw.line(screen, (255, 255, 255), (midX, midY), (endX, endY), width=5)
         pygame.display.flip()
 
-        pygame.image.save(screen, 'planarManipulator/images/{}.jpg'.format(i))
+        pygame.image.save(screen, 'planarManipulator2/images/{}.jpg'.format(i))
         decimals = 4
-        with open('planarManipulator/report.txt', 'a') as f:
-            line = 'id: {} joints: {} {}\n'.format(i, round(angle1, decimals),
-                                                   round(angle2, decimals))
+        with open('planarManipulator2/report.txt', 'a') as f:
+            line = 'id: {} joints: {} {}\n'.format(i, round(joint1, decimals),
+                                                   round(joint2, decimals))
             f.write(line)
 
 

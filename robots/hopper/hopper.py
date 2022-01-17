@@ -27,7 +27,7 @@ def getTargetLegDisplacement():
 
     neural_point = (vel * stance_duration) / 2.0
     disp = neural_point + vel_gain * vel_error
-    disp = np.append(disp, -np.sqrt(getLegLength()**2 - disp[0]** - disp[1]**2))
+    disp = np.append(disp, -np.sqrt(getLegLength()**2 - disp[0]**2 - disp[1]**2))
     return disp
 
 
