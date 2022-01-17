@@ -18,18 +18,18 @@ def createDataset(samples):
         f.truncate(0)  # clears a file!
 
     for i in range(samples):
-        clock.tick(24)
+        clock.tick(48)
         screen.fill((0, 0, 0))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
 
-        # Angle values in range (-6.28, 6.28) for actual control
-        # Joint values in range (-1, 1) for dataset labeling
-        joint1 = random.random() * random.choice((-1, 1))
+        # Angle values in range (0, 6.28) for actual control
+        # Joint values in range (0, 1) for dataset labeling
+        joint1 = random.random()
         angle1 = 2 * math.pi * joint1
-        joint2 = random.random() * random.choice((-1, 1))
+        joint2 = random.random()
         angle2 = 2 * math.pi * joint2
 
         startX = width / 2
