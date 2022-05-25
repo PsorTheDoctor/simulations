@@ -111,13 +111,13 @@ while True:
     #         nowLidarTime = time.time()
     #         # Lidar at 10 Hz
     #         if nowLidarTime - lastLidarTime > .5:
-    #             utils.updateLidar(husky, lidarJoint, numRays, rayFrom, rayTo, rayIds)
+    #             experimental.updateLidar(husky, lidarJoint, numRays, rayFrom, rayTo, rayIds)
     #             lastLidarTime = nowLidarTime
     #     else:
-    #         utils.removeLidar(rayIds)
+    #         experimental.removeLidar(rayIds)
 
     # Control panel
-    basePos, wheelVelocities = utils.configControl(basePos, wheels, wheelVelocities,
+    basePos, wheelp.changeDynamics(plane, -1, lateralFriction=10)Velocities = utils.configControl(basePos, wheels, wheelVelocities,
                                                    wheelDeltasTurn, wheelDeltasFwd,
                                                    shift, speed)
     baseOrn = p.getQuaternionFromEuler([0, 0, ang])
