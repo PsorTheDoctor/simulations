@@ -1,0 +1,632 @@
+<robot name="hand">
+
+<material name="light-gray">
+    <color rgba="0.7 0.7 0.7 1" />
+</material>
+<material name="red">
+    <color rgba="1 0 0 1" />
+</material>
+<material name="green">
+    <color rgba="0 1 0 1" />
+</material>
+<material name="blue">
+    <color rgba="0 0 1 1" />
+</material>
+<material name="yellow">
+    <color rgba="1 1 0 1" />
+</material>
+<material name="orange">
+    <color rgba="1 0.5 0 1" />
+</material>
+
+<link name="stand">
+    <inertial>
+        <origin rpy="0 0 0" xyz="0 0 0.025" />
+        <mass value="1" />
+        <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+    </inertial>
+    <visual name="">
+        <geometry>
+            <cylinder radius="0.125" length="0.05" />
+        </geometry>
+        <material name="light-gray" />
+        <origin rpy="0 0 0" xyz="0 0 0.025" />
+    </visual>
+    <collision name="">
+        <geometry>
+           <cylinder radius="0.125" length="0.05" />
+        </geometry>
+        <origin rpy="0 0 0" xyz="0 0 0.025" />
+    </collision>
+</link>
+
+<link name="palm-base">
+    <inertial>
+        <origin rpy="0 0 0" xyz="0 -0.2 0" />
+        <mass value="1.0" />
+        <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+    </inertial>
+    <visual name="">
+        <geometry>
+            <cylinder radius="0.175" length="0.05" />
+        </geometry>
+        <material name="light-gray" />
+        <origin rpy="0 0 0" xyz="0 -0.2 0" />
+    </visual>
+    <collision name="">
+        <geometry>
+           <cylinder radius="0.175" length="0.05" />
+        </geometry>
+        <origin rpy="0 0 0" xyz="0 -0.2 0" />
+    </collision>
+</link>
+
+<link name="palm">
+    <inertial>
+        <origin rpy="0 0 0" xyz="0.0375 -0.1 0" />
+        <mass value="1.0" />
+        <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+    </inertial>
+    <visual name="">
+        <geometry>
+            <box size="0.275 0.2 0.05" />
+        </geometry>
+        <material name="light-gray" />
+        <origin rpy="0 0 0" xyz="0.0375 -0.1 0" />
+    </visual>
+    <collision name="">
+        <geometry>
+           <box size="0.35 0.2 0.05" />
+        </geometry>
+        <origin rpy="0 0 0" xyz="0.0375 -0.1 0" />
+    </collision>
+</link>
+
+<link name="index-finger-base">
+    <inertial>
+        <origin rpy="1.57 0 0" xyz="0 0 0" />
+        <mass value="1.0" />
+        <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+    </inertial>
+    <visual name="">
+        <geometry>
+            <sphere radius="0.025" />
+        </geometry>
+        <material name="red" />
+        <origin rpy="1.57 0 0" xyz="0 0 0" />
+    </visual>
+    <collision name="">
+        <geometry>
+            <sphere radius="0.025" />
+        </geometry>
+        <origin rpy="1.57 0 0" xyz="0 0 0" />
+    </collision>
+</link>
+
+<link name="middle-finger-base">
+    <inertial>
+        <origin rpy="1.57 0 0" xyz="0 0 0" />
+        <mass value="1.0" />
+        <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+    </inertial>
+    <visual name="">
+        <geometry>
+            <sphere radius="0.025" />
+        </geometry>
+        <material name="green" />
+        <origin rpy="1.57 0 0" xyz="0 0 0" />
+    </visual>
+    <collision name="">
+        <geometry>
+            <sphere radius="0.025" />
+        </geometry>
+        <origin rpy="1.57 0 0" xyz="0 0 0" />
+    </collision>
+</link>
+
+<link name="ring-finger-base">
+    <inertial>
+        <origin rpy="1.57 0 0" xyz="0 0 0" />
+        <mass value="1.0" />
+        <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+    </inertial>
+    <visual name="">
+        <geometry>
+            <sphere radius="0.025" />
+        </geometry>
+        <material name="blue" />
+        <origin rpy="1.57 0 0" xyz="0 0 0" />
+    </visual>
+    <collision name="">
+        <geometry>
+            <sphere radius="0.025" />
+        </geometry>
+        <origin rpy="1.57 0 0" xyz="0 0 0" />
+    </collision>
+</link>
+
+<link name="pinky-finger-base">
+    <inertial>
+        <origin rpy="1.57 0 0" xyz="0 0 0" />
+        <mass value="1.0" />
+        <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+    </inertial>
+    <visual name="">
+        <geometry>
+            <sphere radius="0.025" />
+        </geometry>
+        <material name="yellow" />
+        <origin rpy="1.57 0 0" xyz="0 0 0" />
+    </visual>
+    <collision name="">
+        <geometry>
+            <sphere radius="0.025" />
+        </geometry>
+        <origin rpy="1.57 0 0" xyz="0 0 0" />
+    </collision>
+</link>
+
+<link name="index-finger-lower">
+    <inertial>
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+        <mass value="1.0" />
+        <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+    </inertial>
+    <visual name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.1" />
+        </geometry>
+        <material name="red" />
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+    </visual>
+    <collision name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.1" />
+        </geometry>
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+    </collision>
+</link>
+
+<link name="middle-finger-lower">
+    <inertial>
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+        <mass value="1.0" />
+        <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+    </inertial>
+    <visual name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.1" />
+        </geometry>
+        <material name="green" />
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+    </visual>
+    <collision name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.1" />
+        </geometry>
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+    </collision>
+</link>
+
+<link name="ring-finger-lower">
+    <inertial>
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+        <mass value="1.0" />
+        <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+    </inertial>
+    <visual name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.1" />
+        </geometry>
+        <material name="blue" />
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+    </visual>
+    <collision name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.1" />
+        </geometry>
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+    </collision>
+</link>
+
+<link name="pinky-finger-lower">
+    <inertial>
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+        <mass value="1.0" />
+        <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+    </inertial>
+    <visual name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.1" />
+        </geometry>
+        <material name="yellow" />
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+    </visual>
+    <collision name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.1" />
+        </geometry>
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+    </collision>
+</link>
+
+<link name="index-finger-mid">
+    <inertial>
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+        <mass value="1.0" />
+        <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+    </inertial>
+    <visual name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.1" />
+        </geometry>
+        <material name="red" />
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+    </visual>
+    <collision name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.1" />
+        </geometry>
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+    </collision>
+</link>
+
+<link name="middle-finger-mid">
+    <inertial>
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+        <mass value="1.0" />
+        <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+    </inertial>
+    <visual name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.1" />
+        </geometry>
+        <material name="green" />
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+    </visual>
+    <collision name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.1" />
+        </geometry>
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+    </collision>
+</link>
+
+<link name="ring-finger-mid">
+    <inertial>
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+        <mass value="1.0" />
+        <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+    </inertial>
+    <visual name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.1" />
+        </geometry>
+        <material name="blue" />
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+    </visual>
+    <collision name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.1" />
+        </geometry>
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+    </collision>
+</link>
+
+<link name="pinky-finger-mid">
+    <inertial>
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+        <mass value="1.0" />
+        <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+    </inertial>
+    <visual name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.1" />
+        </geometry>
+        <material name="yellow" />
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+    </visual>
+    <collision name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.1" />
+        </geometry>
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+    </collision>
+</link>
+
+<link name="index-finger-top">
+    <inertial>
+        <origin rpy="1.57 0 0" xyz="0 0.025 0" />
+        <mass value="1.0" />
+        <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+    </inertial>
+    <visual name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.075" />
+        </geometry>
+        <material name="red" />
+        <origin rpy="1.57 0 0" xyz="0 0.025 0" />
+    </visual>
+    <collision name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.1" />
+        </geometry>
+        <origin rpy="1.57 0 0" xyz="0 0.025 0" />
+    </collision>
+</link>
+
+<link name="middle-finger-top">
+    <inertial>
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+        <mass value="1.0" />
+        <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+    </inertial>
+    <visual name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.1" />
+        </geometry>
+        <material name="green" />
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+    </visual>
+    <collision name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.1" />
+        </geometry>
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+    </collision>
+</link>
+
+<link name="ring-finger-top">
+    <inertial>
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+        <mass value="1.0" />
+        <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+    </inertial>
+    <visual name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.1" />
+        </geometry>
+        <material name="blue" />
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+    </visual>
+    <collision name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.1" />
+        </geometry>
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+    </collision>
+</link>
+
+<link name="pinky-finger-top">
+    <inertial>
+        <origin rpy="1.57 0 0" xyz="0 0.025 0" />
+        <mass value="1.0" />
+        <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+    </inertial>
+    <visual name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.075" />
+        </geometry>
+        <material name="yellow" />
+        <origin rpy="1.57 0 0" xyz="0 0.025 0" />
+    </visual>
+    <collision name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.1" />
+        </geometry>
+        <origin rpy="1.57 0 0" xyz="0 0.025 0" />
+    </collision>
+</link>
+
+<link name="thumb-base">
+    <inertial>
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+        <mass value="1.0" />
+        <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+    </inertial>
+    <visual name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.1" />
+        </geometry>
+        <material name="orange" />
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+    </visual>
+    <collision name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.1" />
+        </geometry>
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+    </collision>
+</link>
+
+<link name="thumb-lower">
+    <inertial>
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+        <mass value="1.0" />
+        <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+    </inertial>
+    <visual name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.1" />
+        </geometry>
+        <material name="orange" />
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+    </visual>
+    <collision name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.1" />
+        </geometry>
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+    </collision>
+</link>
+<link name="thumb-top">
+    <inertial>
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+        <mass value="1.0" />
+        <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+    </inertial>
+    <visual name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.1" />
+        </geometry>
+        <material name="orange" />
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+    </visual>
+    <collision name="">
+        <geometry>
+            <cylinder radius="0.025" length="0.1" />
+        </geometry>
+        <origin rpy="1.57 0 0" xyz="0 0.05 0" />
+    </collision>
+</link>
+
+<joint name="stand" type="fixed">
+    <origin rpy="1.57 0 0" xyz="0 0 0.375" />
+    <parent link="stand" />
+    <child link="palm-base" />
+</joint>
+<joint name="palm" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 0" />
+    <parent link="palm-base" />
+    <child link="palm" />
+</joint>
+
+<joint name="index-finger-mcp1" type="revolute">
+    <origin rpy="0 0 0" xyz="-0.075 0 0" />
+    <parent link="palm" />
+    <child link="index-finger-base" />
+    <axis xyz="0 0 1" />
+    <limit effort="1000" lower="0" upper="0.52" velocity="1" />
+</joint>
+<joint name="middle-finger-mcp1" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 0" />
+    <parent link="palm" />
+    <child link="middle-finger-base" />
+    <axis xyz="0 0 1" />
+    <limit effort="1000" lower="0" upper="0.26" velocity="1" />
+</joint>
+<joint name="ring-finger-mcp1" type="revolute">
+    <origin rpy="0 0 0" xyz="0.075 0 0" />
+    <parent link="palm" />
+    <child link="ring-finger-base" />
+    <axis xyz="0 0 1" />
+    <limit effort="1000" lower="-0.26" upper="0" velocity="1" />
+</joint>
+<joint name="pinky-finger-mcp1" type="revolute">
+    <origin rpy="0 0 0" xyz="0.15 0 0" />
+    <parent link="palm" />
+    <child link="pinky-finger-base" />
+    <axis xyz="0 0 1" />
+    <limit effort="1000" lower="-0.52" upper="0" velocity="1" />
+</joint>
+
+<joint name="index-finger-mcp2" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 0" />
+    <parent link="index-finger-base" />
+    <child link="index-finger-lower" />
+    <axis xyz="1 0 0" />
+    <limit effort="1000" lower="-1.57" upper="0" velocity="1" />
+</joint>
+<joint name="middle-finger-mcp2" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 0" />
+    <parent link="middle-finger-base" />
+    <child link="middle-finger-lower" />
+    <axis xyz="1 0 0" />
+    <limit effort="1000" lower="-1.57" upper="0" velocity="1" />
+</joint>
+<joint name="ring-finger-mcp2" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 0" />
+    <parent link="ring-finger-base" />
+    <child link="ring-finger-lower" />
+    <axis xyz="1 0 0" />
+    <limit effort="1000" lower="-1.57" upper="0" velocity="1" />
+</joint>
+<joint name="pinky-finger-mcp2" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 0" />
+    <parent link="pinky-finger-base" />
+    <child link="pinky-finger-lower" />
+    <axis xyz="1 0 0" />
+    <limit effort="1000" lower="-1.57" upper="0" velocity="1" />
+</joint>
+
+<joint name="index-finger-pip" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0.1 0" />
+    <parent link="index-finger-lower" />
+    <child link="index-finger-mid" />
+    <axis xyz="1 0 0" />
+    <limit effort="1000" lower="-1.57" upper="0" velocity="1" />
+</joint>
+<joint name="middle-finger-pip" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0.1 0" />
+    <parent link="middle-finger-lower" />
+    <child link="middle-finger-mid" />
+    <axis xyz="1 0 0" />
+    <limit effort="1000" lower="-1.57" upper="0" velocity="1" />
+</joint>
+<joint name="ring-finger-pip" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0.1 0" />
+    <parent link="ring-finger-lower" />
+    <child link="ring-finger-mid" />
+    <axis xyz="1 0 0" />
+    <limit effort="1000" lower="-1.57" upper="0" velocity="1" />
+</joint>
+<joint name="pinky-finger-pip" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0.1 0" />
+    <parent link="pinky-finger-lower" />
+    <child link="pinky-finger-mid" />
+    <axis xyz="1 0 0" />
+    <limit effort="1000" lower="-1.57" upper="0" velocity="1" />
+</joint>
+
+<joint name="index-finger-dip" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0.1 0" />
+    <parent link="index-finger-mid" />
+    <child link="index-finger-top" />
+    <axis xyz="1 0 0" />
+    <limit effort="1000" lower="-1.57" upper="0" velocity="1" />
+</joint>
+<joint name="middle-finger-dip" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0.1 0" />
+    <parent link="middle-finger-mid" />
+    <child link="middle-finger-top" />
+    <axis xyz="1 0 0" />
+    <limit effort="1000" lower="-1.57" upper="0" velocity="1" />
+</joint>
+<joint name="ring-finger-dip" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0.1 0" />
+    <parent link="ring-finger-mid" />
+    <child link="ring-finger-top" />
+    <axis xyz="1 0 0" />
+    <limit effort="1000" lower="-1.57" upper="0" velocity="1" />
+</joint>
+<joint name="pinky-finger-dip" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0.1 0" />
+    <parent link="pinky-finger-mid" />
+    <child link="pinky-finger-top" />
+    <axis xyz="1 0 0" />
+    <limit effort="1000" lower="-1.57" upper="0" velocity="1" />
+</joint>
+
+<joint name="thumb-cmc" type="revolute">
+    <origin rpy="0 0 0" xyz="-0.15 -0.2 0" />
+    <parent link="palm-base" />
+    <child link="thumb-base" />
+    <axis xyz="1 0 0" />
+    <limit effort="1000" lower="-1.57" upper="0" velocity="1" />
+</joint>
+<joint name="thumb-mcp" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0.1 0" />
+    <parent link="thumb-base" />
+    <child link="thumb-lower" />
+    <axis xyz="0 0 1" />
+    <limit effort="1000" lower="-1.57" upper="0" velocity="1" />
+</joint>
+<joint name="thumb-ip" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0.1 0" />
+    <parent link="thumb-lower" />
+    <child link="thumb-top" />
+    <axis xyz="0 0 1" />
+    <limit effort="1000" lower="-1.57" upper="0" velocity="1" />
+</joint>
+
+</robot>
