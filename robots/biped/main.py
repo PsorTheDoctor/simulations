@@ -1,6 +1,28 @@
 import numpy as np
+import pybullet as p
+import cv2
 from robots.biped.robot import Biped
 from robots.biped.walking import PreviewControl
+import threading
+import time
+
+
+def record(outfile):
+    width = 512
+    height = 512
+    fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    writer = cv2.VideoWriter(outfile, fourcc, 48, (width, height))
+
+    time.sleep(2)  # Start recording after 2 secs
+    for i in range(960):
+        images = p.getCameraImage(width, height, renderer=p.ER_BULLET_HARDWARE_OPENGL)
+        rgb = images[2]
+        bgr = cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR)
+        writer.write(bgr)
+        time.sleep(1./240.)
+
+    writer.release()
+    print('Recording saved as {}'.format(outfile))
 
 
 def stand():
@@ -12,7 +34,7 @@ def stand():
     targetPosR = [0.0, -0.065, -CoM_height]
     biped.positionInitialize(initializeTime=0.2)
 
-    while True:
+    for i in range(100):
         incline = biped.getIncline()
         biped.resetIncline(incline)
         targetRPY[1] = incline
@@ -149,4 +171,7 @@ def walk():
 
 
 if __name__ == '__main__':
-    jump(withTorsoTwist=True)
+    simThread = threading.Thread(target=jump, args=(True,))
+    recThread = threading.Thread(target=record, args=('videos/jump_with_torso_twist.mp4',))
+    simThread.start()
+    recThread.start()

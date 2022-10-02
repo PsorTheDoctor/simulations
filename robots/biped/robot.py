@@ -29,7 +29,6 @@ class Robot:
         self.maxForceList = [maxForce] * 12
         self.stride = p.addUserDebugParameter('Stride', 0, 0.2, 0.1)
         self.stepHeight = p.addUserDebugParameter('Step height', 0.03, 0.1, 0.04)
-
         self.timeStep = 1. / 240.
 
     def getEuler(self):
@@ -73,8 +72,8 @@ class Robot:
 
     def oneStep(self):
         robotPos, _ = p.getBasePositionAndOrientation(self.robotId)
-        p.resetDebugVisualizerCamera(cameraDistance=1.0, cameraYaw=135, cameraPitch=-10,
-                                     cameraTargetPosition=robotPos)
+        p.resetDebugVisualizerCamera(cameraDistance=0.45, cameraYaw=112.5, cameraPitch=-10,
+                                     cameraTargetPosition=[robotPos[0], robotPos[1], robotPos[2]-0.15])
         p.stepSimulation()
         time.sleep(self.timeStep)
 

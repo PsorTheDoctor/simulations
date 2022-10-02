@@ -1,0 +1,204 @@
+<?xml version="1.0"?>
+<robot name ="my_kuka">
+ <link name="base_link">
+      <visual>
+  	<origin rpy="0 0 0" xyz="0 0 0.411"/>
+	<geometry>
+	  <mesh filename = "package://my_scara/mesh/baza.stl"/>
+       </geometry>
+      </visual>
+	<collision>
+	<origin rpy="0 0 0" xyz="0 0 0.411"/>
+      	<geometry>
+           <mesh filename = "package://my_scara/mesh/baza.stl"/>
+      	 </geometry>
+   	 </collision>
+   	  <inertial>
+      	     <origin rpy="0 0 0" xyz="0 0 0"/>
+      	     <mass value="10"/>
+      	     <inertia ixx="0.86" ixy="0" ixz="0" iyy="0.86" iyz="0" izz="0.05"/>
+   	  </inertial>
+	</link>
+
+<link name="arm_link">
+    <visual>
+      <geometry>
+        <mesh filename = "package://my_scara/mesh/ramie1.stl"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0.441"/>
+
+    </visual>
+    <collision>
+      <geometry>
+         <mesh filename = "package://my_scara/mesh/ramie1.stl"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0.441"/>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.5 0 0.05"/>
+      <mass value="10"/>
+      <inertia ixx="0.042" ixy="0" ixz="0" iyy="1.21" iyz="0" izz="1.23"/>
+    </inertial>
+  </link>
+
+
+<link name="arm1_link">
+    <visual>
+      <geometry>
+        <mesh filename = "package://my_scara/mesh/ramie2.stl"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+
+    </visual>
+    <collision>
+      <geometry>
+         <mesh filename = "package://my_scara/mesh/ramie2.stl"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.5 0 0.05"/>
+      <mass value="10"/>
+      <inertia ixx="0.042" ixy="0" ixz="0" iyy="1.21" iyz="0" izz="1.23"/>
+    </inertial>
+  </link>
+
+
+<link name="arm2_link">
+    <visual>
+      <geometry>
+        <mesh filename = "package://my_scara/mesh/ramie3.stl"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+
+    </visual>
+    <collision>
+      <geometry>
+         <mesh filename = "package://my_scara/mesh/ramie3.stl"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.5 0 0.05"/>
+      <mass value="10"/>
+      <inertia ixx="0.042" ixy="0" ixz="0" iyy="1.21" iyz="0" izz="1.23"/>
+    </inertial>
+  </link>
+
+
+
+<link name="arm3_link">
+    <visual>
+      <geometry>
+        <mesh filename = "package://my_scara/mesh/ramie4.stl"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+
+    </visual>
+    <collision>
+      <geometry>
+         <mesh filename = "package://my_scara/mesh/ramie4.stl"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.5 0 0.05"/>
+      <mass value="10"/>
+      <inertia ixx="0.042" ixy="0" ixz="0" iyy="1.21" iyz="0" izz="1.23"/>
+    </inertial>
+  </link>
+
+
+<link name="arm4_link">
+    <visual>
+      <geometry>
+        <mesh filename = "package://my_scara/mesh/ramie5.stl"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+
+    </visual>
+    <collision>
+      <geometry>
+         <mesh filename = "package://my_scara/mesh/ramie5.stl"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.5 0 0.05"/>
+      <mass value="10"/>
+      <inertia ixx="0.042" ixy="0" ixz="0" iyy="1.21" iyz="0" izz="1.23"/>
+    </inertial>
+  </link>
+
+<link name="arm5_link">
+    <visual>
+      <geometry>
+        <mesh filename = "package://my_scara/mesh/ramie7.stl"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+
+    </visual>
+    <collision>
+      <geometry>
+         <mesh filename = "package://my_scara/mesh/ramie7.stl"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.5 0 0.05"/>
+      <mass value="10"/>
+      <inertia ixx="0.042" ixy="0" ixz="0" iyy="1.21" iyz="0" izz="1.23"/>
+    </inertial>
+  </link>
+
+  <joint name="shoulder_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="arm_link"/>
+    <axis xyz="0 0 1"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <limit effort="1000.0" lower="-6.28" upper="6.28" velocity="1.0"/>
+  </joint>
+
+  <joint name="arm_joint1" type="revolute">
+    <parent link="arm_link"/>
+    <child link="arm1_link"/>
+    <axis xyz="0 0 1"/>
+    <origin rpy="0 1.571 3.14" xyz="-0.30 -0.475 0.828"/>
+    <limit effort="1000.0" lower="-6.28" upper="6.28" velocity="1.0"/>
+  </joint>
+
+
+    <joint name="arm_joint2" type="revolute">
+    <parent link="arm1_link"/>
+    <child link="arm2_link"/>
+    <axis xyz="0 0 1"/>
+    <origin rpy="0 3.14 3.14" xyz="1.30 0 -0.15"/>
+    <limit effort="1000.0" lower="-6.28" upper="6.28" velocity="1.0"/>
+  </joint>
+
+
+   <joint name="arm_joint3" type="revolute">
+    <parent link="arm2_link"/>
+    <child link="arm3_link"/>
+    <axis xyz="0 0 1"/>
+    <origin rpy="1.57 0 0" xyz="0.049 0.47 0.205"/>
+    <limit effort="1000.0" lower="-6.28" upper="6.28" velocity="1.0"/>
+  </joint>
+
+ <joint name="arm_joint4" type="revolute">
+    <parent link="arm3_link"/>
+    <child link="arm4_link"/>
+    <axis xyz="1 0 0"/>
+    <origin rpy="1.57 0 0" xyz="-0.113 -0.0 -0.415"/>
+    <limit effort="1000.0" lower="-6.28" upper="6.28" velocity="1.0"/>
+  </joint>
+
+  <joint name="arm_joint5" type="revolute">
+    <parent link="arm4_link"/>
+    <child link="arm5_link"/>
+    <axis xyz="0 0 1"/>
+    <origin rpy="0 3.14 0" xyz="0.145 -0.0 -0.214"/>
+    <limit effort="1000.0" lower="-6.28" upper="6.28" velocity="1.0"/>
+  </joint>
+
+</robot>
